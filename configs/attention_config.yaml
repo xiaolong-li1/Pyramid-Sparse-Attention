@@ -1,0 +1,246 @@
+Wan2.1_14b:
+  default_attention: psa_balanced
+  video_scale:
+    width_divisor: 16
+    height_divisor: 16
+    depth_divisor: 4
+  text_length: 0
+  attention_configs:
+    baseline:
+      type: dense
+      description: "Dense baseline without sparsity."
+    psa_balanced:
+      type: psa
+      description: "Balanced PSA configuration for Wan2.1 14B."
+      use_rearrange: true
+      use_sim_mask: false
+      block_size:
+        m: 128
+        n: 128
+        tile_n: 32
+      mask_ratios:
+        1: [0.0, 0.4]
+        2: [0.4, 0.5]
+        4: [0.5, 0.6]
+        8: [0.6, 0.8]
+        0: [0.8, 1.0]
+      mask_mode: thresholdbound
+      attn_impl: new_mask_type
+      tile_size: [2, 8, 8]
+      warmup_steps: 15
+      rearrange_method: Gilbert
+      verbose: true
+      sim_thresholds:
+        x2: 0.7
+        x4: 0.65
+        x8: 0.6
+  
+Wan2.1_1.3b:
+  default_attention: psa_balanced
+  video_scale:
+    width_divisor: 16
+    height_divisor: 16
+    depth_divisor: 4
+  text_length: 0
+  attention_configs:
+    baseline:
+      type: dense
+      description: "Dense baseline without sparsity."
+    psa_balanced:
+      type: psa
+      description: "Balanced PSA configuration for Wan2.1 1.3B."
+      use_rearrange: true
+      use_sim_mask: false
+      block_size:
+        m: 128
+        n: 32
+        tile_n: 32
+      mask_ratios:
+        1: [0.00, 0.60]
+        2: [0.60, 0.70]
+        4: [0.70, 0.70]
+        8: [0.70, 0.80]
+        0: [0.80, 1.00]
+      mask_mode: thresholdbound
+      attn_impl: new_mask_type
+      tile_size: [2, 8, 8]
+      warmup_steps: 15
+      rearrange_method: Gilbert
+      verbose: true
+      sim_thresholds:
+        x2: 0.7
+        x4: 0.65
+        x8: 0.6
+
+Wan2.2_A14B:
+  default_attention: psa_balanced
+  video_scale:
+    width_divisor: 16
+    height_divisor: 16
+    depth_divisor: 4
+  text_length: 0
+  attention_configs:
+    baseline:
+      type: dense
+      description: "Dense baseline without sparsity."
+    psa_balanced:
+      type: psa
+      description: "Balanced PSA configuration for Wan2.2 A14B (same as Wan2.1 14B)."
+      use_rearrange: true
+      use_sim_mask: false
+      block_size:
+        m: 128
+        n: 32
+        tile_n: 32
+      mask_ratios:
+        1: [0.0, 0.5]
+        2: [0.5, 0.6]
+        4: [0.6, 0.6]
+        8: [0.6, 0.8]
+        0: [0.8, 1.0]
+      mask_mode: thresholdbound
+      attn_impl: new_mask_type
+      tile_size: [2, 8, 8]
+      warmup_steps: 12
+      rearrange_method: Gilbert
+      verbose: true
+      sim_thresholds:
+        x2: 0.7
+        x4: 0.65
+        x8: 0.6
+
+Wan2.2_5B:
+  default_attention: psa_balanced
+  video_scale:
+    width_divisor: 32
+    height_divisor: 32
+    depth_divisor: 4
+  text_length: 0
+  attention_configs:
+    baseline:
+      type: dense
+      description: "Dense baseline without sparsity."
+    psa_balanced:
+      type: psa
+      description: "Balanced PSA for Wan2.2 5B."
+      use_rearrange: True
+      use_sim_mask: false
+      block_size:
+        m: 128
+        n: 32
+        tile_n: 32
+      mask_ratios:
+        1: [0.0, 0.6]
+        2: [0.6, 0.7]
+        4: [0.7, 0.7]
+        8: [0.7, 0.8]
+        0: [0.8, 1.0]
+      mask_mode: thresholdbound
+      attn_impl: new_mask_type
+      tile_size: [2, 8, 8]
+      warmup_steps: 15
+      rearrange_method: Gilbert
+      verbose: true
+      sim_thresholds:
+        x2: 0.7
+        x4: 0.65
+        x8: 0.6
+
+CogVideo1.5_5b:
+  default_attention: psa_balanced
+  video_scale:
+    width_divisor: 16  # VAE(8x) * Patch(2x) = 16
+    height_divisor: 16  # VAE(8x) * Patch(2x) = 16
+    depth_divisor: 8    # VAE(4x) * Patch(2x) = 8
+  text_length: 226
+  attention_configs:
+    baseline:
+      type: dense
+      description: "Dense baseline without sparsity."
+    psa_balanced:
+      type: psa
+      description: "Balanced PSA configuration for CogVideoX1.5-5B (same as Wan2.1 14B)."
+      use_rearrange: true
+      use_sim_mask: false
+      block_size:
+        m: 128
+        n: 32
+        tile_n: 32
+      mask_ratios:
+        1: [0.0, 0.1]
+        2: [0.1, 0.15]
+        4: [0.15, 0.15]
+        8: [0.15, 0.35]
+        0: [0.35, 1.0]
+      mask_mode: topk
+      attn_impl: new_mask_type
+      tile_size: [2, 8, 8]
+      warmup_steps: 15
+      rearrange_method: Gilbert
+      verbose: true
+      sim_thresholds:
+        x2: 0.7
+        x4: 0.65
+        x8: 0.6
+
+CogVideo_5b:
+  default_attention: psa_balanced
+  video_scale:
+    width_divisor: 16
+    height_divisor: 16
+    depth_divisor: 4
+  text_length: 226
+  attention_configs:
+    baseline:
+      type: dense
+      description: "Dense baseline without sparsity."
+    psa_balanced:
+      type: psa
+      description: "Balanced PSA configuration for CogVideo 5B (same as Wan2.1)."
+      use_rearrange: false
+      use_sim_mask: false
+      block_size:
+        m: 128
+        n: 128
+        tile_n: 32
+      mask_ratios:
+        1: [0.0, 0.1]
+        2: [0.1, 0.15]
+        4: [0.15, 0.15]
+        8: [0.15, 0.35]
+        0: [0.35, 1.0]
+      mask_mode: topk
+      attn_impl: new_mask_type
+      tile_size: [2, 8, 8]
+      warmup_steps: 15
+      rearrange_method: Gilbert
+      verbose: true
+      sim_thresholds:
+        x2: 0.7
+        x4: 0.65
+        x8: 0.6
+    psa_4steps:
+      type: psa
+      description: "PSA configuration for CogVideo 5B 4-step LoRA inference."
+      use_rearrange: false
+      use_sim_mask: false
+      block_size:
+        m: 128
+        n: 128
+        tile_n: 32
+      mask_ratios:
+        1: [0.0, 0.05]
+        2: [0.05, 0.15]
+        4: [0.15, 0.25]
+        8: [0.25, 0.5]
+        0: [0.5, 1.0]
+      mask_mode: topk
+      attn_impl: old_mask_type
+      tile_size: [2, 8, 8]
+      warmup_steps: 0
+      rearrange_method: Gilbert
+      verbose: true
+      sim_thresholds:
+        x2: 0.7
+        x4: 0.65
+        x8: 0.6

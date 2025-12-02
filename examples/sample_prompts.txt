@@ -1,0 +1,50 @@
+# Sample Prompts for Video Generation
+# One prompt per line, lines starting with # are ignored
+
+# Animals
+A panda sitting on a stool playing an acoustic guitar in a bamboo forest
+A golden retriever puppy chasing butterflies in a sunny meadow
+A cat wearing tiny sunglasses lounging by a pool
+A hummingbird feeding from a vibrant red flower in slow motion
+
+# Nature & Landscapes
+Northern lights dancing over a snowy mountain landscape at night
+Waves crashing against rocky cliffs at sunset
+Cherry blossoms falling in a Japanese garden during spring
+Timelapse of clouds moving over a vast desert landscape
+
+# Urban & Technology
+A busy city street at night with neon lights reflecting on wet pavement
+A robot barista making coffee in a futuristic cafe
+Drone footage flying through a modern glass skyscraper
+Street performer juggling fire torches surrounded by a crowd
+
+# Food & Cooking
+Steam rising from a pot of pasta being cooked by a chef
+Close-up of chocolate being poured over a strawberry
+A baker kneading dough in a rustic kitchen
+Sizzling vegetables being stir-fried in a wok
+
+# Abstract & Artistic
+Colorful ink drops spreading in water creating abstract patterns
+Geometric shapes morphing and rotating in 3D space
+Paint brush strokes creating a landscape on canvas
+Light rays piercing through fog in a mysterious forest
+
+# Everyday Moments
+Raindrops falling on a window with blurred city lights beyond
+A book's pages flipping in the wind
+Morning coffee being poured into a white cup
+Candle flame flickering in a dark room
+
+# Sci-Fi & Fantasy
+A spaceship flying through an asteroid field
+A dragon soaring over a medieval castle
+Holographic interface being manipulated by invisible hands
+Portal opening with swirling energy and bright light
+
+# Sports & Action
+Skateboarder performing a trick in slow motion
+Basketball going through the hoop in perfect arc
+Surfer riding a massive wave at sunset
+Gymnast executing a perfect backflip
