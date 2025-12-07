@@ -32,7 +32,7 @@ source .venv/bin/activate
 pip install -e .
 ```
 
-> For best performance, we recommend using PyTorch nightly version.
+**Plug-and-play module:** For a simple drop-in replacement, see [`src/psa_triton/README.md`](src/psa_triton/README.md).
 
 ## Download Weights
 

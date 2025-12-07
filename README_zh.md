@@ -32,7 +32,7 @@ source .venv/bin/activate
 pip install -e .
 ```
 
-> 为获得最佳性能，建议使用 PyTorch nightly 版本。
+**即插即用模块：** 如需简单的 drop-in 替换，请参阅 [`src/psa_triton/README_zh.md`](src/psa_triton/README_zh.md)。
 
 ## 下载权重
 
