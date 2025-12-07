@@ -57,11 +57,19 @@ class PSAConfig:
     # Mask generation mode: 'topk' (fixed quota) or 'thresholdbound' (dynamic)
     mask_mode: str = 'topk'
     
-    # Similarity-based pooling csonstraint (adaptive pooling decisions)
+    # Similarity-based pooling constraint (adaptive pooling decisions)
     use_sim_mask: bool = False
     sim_2x_threshold: float = 0.0   # 2x pooling threshold
     sim_4x_threshold: float = 0.0   # 4x pooling threshold
     sim_8x_threshold: float = -1.0  # 8x pooling threshold (disabled by default)
+
+    # Rearrangement method for token ordering
+    rearrange_method: str = None  # 'Gilbert', 'STA', 'SemanticAware', 'Hybrid'
+
+    # Kernel implementation - selects mask format
+    # "new_mask_type": uses separator-based mask format (default, more efficient)
+    # "old_mask_type": uses legacy mask format (required for use_sim_mask=True)
+    attn_impl: str = "new_mask_type"
 
 
 def _pad_to_multiple(x: torch.Tensor, multiple: int) -> torch.Tensor:
@@ -214,24 +222,46 @@ class PSAAttention(nn.Module):
             Output tensor [B, H, L, D]
         """
         config = self.config
-        
+
         # Compute attention pooling and mask (no gradient tracking)
         with torch.no_grad():
             pooling, sim_mask = _compute_attention_pooling(q, k, v, config)
-            
+
+            # Determine mask mode based on attn_impl setting
+            if config.attn_impl == "old_mask_type":
+                mode = config.mask_mode  # 'topk' or 'thresholdbound'
+            else:
+                mode = f"{config.mask_mode}_newtype"  # 'topk_newtype' or 'thresholdbound_newtype'
+
             # Generate sparse mask
-            mode = f"{config.mask_mode}_newtype"
             mask = transfer_attn_to_mask(
-                pooling, 
-                config.mask_ratios, 
+                pooling,
+                config.mask_ratios,
                 text_length=0,  # No text-specific handling
-                mode=mode, 
-                blocksize=config.block_n, 
+                mode=mode,
+                blocksize=config.block_n,
                 compute_tile=config.tile_n
             )
-            
+
+            # Validate old_mask_type constraints
+            if config.attn_impl == "old_mask_type":
+                if config.block_m != 128 or config.block_n != 128:
+                    raise ValueError(
+                        f"attn_impl='old_mask_type' only supports block_m=128 and block_n=128. "
+                        f"Got block_m={config.block_m}, block_n={config.block_n}. "
+                        f"Use attn_impl='new_mask_type' for flexible block sizes."
+                    )
+
             # Apply similarity constraint if enabled
+            # Note: sim_mask is only compatible with old_mask_type (topk/thresholdbound),
+            # not with new_mask_type which adds separator positions to the mask dimension.
             if config.use_sim_mask and sim_mask is not None:
+                if config.attn_impl == "new_mask_type":
+                    raise ValueError(
+                        f"use_sim_mask=True is not compatible with attn_impl='new_mask_type'. "
+                        f"Similarity-based pooling constraint only works with attn_impl='old_mask_type'. "
+                        f"Please set attn_impl='old_mask_type' in PSAConfig to use use_sim_mask."
+                    )
                 if sim_mask.dtype != mask.dtype:
                     sim_mask = sim_mask.to(mask.dtype)
                 mask = torch.min(sim_mask, mask)

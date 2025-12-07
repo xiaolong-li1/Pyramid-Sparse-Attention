@@ -61,7 +61,13 @@ out = psa(q, k, v)
 | `tile_n` | int | 32 | K/V 处理的 tile 大小 |
 | `mask_ratios` | dict | 见上 | 各 pyramid level 的稀疏度分布 |
 | `mask_mode` | str | `'topk'` | `'topk'` (固定配额) 或 `'thresholdbound'` (动态分配) |
-| `use_sim_mask` | bool | False | 启用相似度约束的 pooling |
+| `use_sim_mask` | bool | False | 启用相似度约束的 pooling（需要 `attn_impl='old_mask_type'`） |
 | `sim_2x_threshold` | float | 0.0 | 2x pooling 的相似度阈值 |
 | `sim_4x_threshold` | float | 0.0 | 4x pooling 的相似度阈值 |
 | `sim_8x_threshold` | float | -1.0 | 8x pooling 的相似度阈值 |
+| `rearrange_method` | str | None | Token 重排方法: `'Gilbert'`, `'STA'`, `'SemanticAware'`, `'Hybrid'` |
+| `attn_impl` | str | `'new_mask_type'` | 内核实现: `'new_mask_type'`（默认）或 `'old_mask_type'` |
+
+> **注意**:
+> - `use_sim_mask=True` 需要设置 `attn_impl='old_mask_type'`。由于 mask 格式差异，相似度约束的 pooling 功能与 `new_mask_type` 不兼容。
+> - `attn_impl='old_mask_type'` 仅支持 `block_m=128` 和 `block_n=128`。其他 block 大小（128、64、32）请使用 `new_mask_type`。

@@ -61,7 +61,13 @@ out = psa(q, k, v)
 | `tile_n` | int | 32 | Tile size for K/V processing |
 | `mask_ratios` | dict | See above | Sparsity distribution per pyramid level |
 | `mask_mode` | str | `'topk'` | `'topk'` (fixed quota) or `'thresholdbound'` (dynamic) |
-| `use_sim_mask` | bool | False | Enable similarity-based pooling constraint |
+| `use_sim_mask` | bool | False | Enable similarity-based pooling constraint (requires `attn_impl='old_mask_type'`) |
 | `sim_2x_threshold` | float | 0.0 | Similarity threshold for 2x pooling |
 | `sim_4x_threshold` | float | 0.0 | Similarity threshold for 4x pooling |
 | `sim_8x_threshold` | float | -1.0 | Similarity threshold for 8x pooling |
+| `rearrange_method` | str | None | Token rearrangement method: `'Gilbert'`, `'STA'`, `'SemanticAware'`, `'Hybrid'` |
+| `attn_impl` | str | `'new_mask_type'` | Kernel implementation: `'new_mask_type'` (default) or `'old_mask_type'` |
+
+> **Note**:
+> - `use_sim_mask=True` requires `attn_impl='old_mask_type'`. The similarity-based pooling constraint is not compatible with `new_mask_type` due to mask format differences.
+> - `attn_impl='old_mask_type'` only supports `block_m=128` and `block_n=128`. Use `new_mask_type` for other block sizes (128, 64, 32).
